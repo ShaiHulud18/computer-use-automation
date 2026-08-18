@@ -1,0 +1,72 @@
+{
+  "runId": "replay-2026-08-18T19-51-03-785Z-mmvxj2",
+  "capabilityId": "lookup-member-balance",
+  "capabilityVersion": 1,
+  "startedAt": "2026-08-18T19:51:03.877Z",
+  "finishedAt": "2026-08-18T19:51:05.681Z",
+  "status": "success",
+  "outputs": {
+    "memberName": "Rosa Alvarez",
+    "savingsBalance": "▓▓REDACTED▓▓"
+  },
+  "recoveries": [
+    {
+      "at": "2026-08-18T19:51:03.898Z",
+      "stepId": "s0-navigate-to-the-bank-app",
+      "detectorId": "maintenance-interstitial",
+      "recovery": "dismiss",
+      "attempts": 1
+    }
+  ],
+  "steps": [
+    {
+      "stepId": "s0-navigate-to-the-bank-app",
+      "intent": "Navigate to the bank application entrypoint",
+      "status": "recovered",
+      "durationMs": 601
+    },
+    {
+      "stepId": "s1-click-on-member-search-t",
+      "intent": "Click on Member Search to search for member {{inputs.memberId}}",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 55
+    },
+    {
+      "stepId": "s2-fill-the-member-id-field",
+      "intent": "Fill the Member ID field with {{inputs.memberId}}",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 497
+    },
+    {
+      "stepId": "s3-click-search-records-but",
+      "intent": "Click Search Records button to search for member {{inputs.memberId}}",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 74
+    },
+    {
+      "stepId": "s4-click-view-record-to-see",
+      "intent": "Click View Record to see member details including savings balance",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 60
+    },
+    {
+      "stepId": "s5-extract-member-name-from",
+      "intent": "Extract member name from the record",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:css",
+      "durationMs": 503
+    },
+    {
+      "stepId": "s6-extract-savings-balance",
+      "intent": "Extract savings balance from the account information",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:css",
+      "durationMs": 12
+    }
+  ],
+  "evidenceDir": "/Users/ashisharavindadini/Desktop/InterfaceAI/runs/replay-2026-08-18T19-51-03-785Z-mmvxj2"
+}

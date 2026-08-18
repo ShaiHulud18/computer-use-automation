@@ -91,7 +91,9 @@ export type TargetSpec = z.infer<typeof TargetSpecSchema>;
 /* ------------------------------------------------------------------ */
 
 export const ConditionSchema = z.discriminatedUnion("kind", [
-  z.object({ kind: z.literal("url_matches"), pattern: z.string() }),   // regex
+  // Regex tested against the location's PATH+QUERY (never the origin —
+  // origins are tenant bindings + policy allowlist territory).
+  z.object({ kind: z.literal("url_matches"), pattern: z.string() }),
   z.object({ kind: z.literal("text_visible"), pattern: z.string() }),  // regex, page text
   z.object({ kind: z.literal("element_visible"), target: TargetSpecSchema }),
 ]);

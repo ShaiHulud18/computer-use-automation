@@ -1,0 +1,61 @@
+{"ts":"2026-08-18T19:51:02.188Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"web","headed":"false"}
+{"ts":"2026-08-18T19:51:02.189Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.gate.approval","status":"draft","allowed":true,"via":"option"}
+{"ts":"2026-08-18T19:51:02.189Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.inputs.validated","params":"{\"memberId\":\"99999\"}"}
+{"ts":"2026-08-18T19:51:02.189Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.start","stepId":"s0-navigate-to-the-bank-app","index":0,"intent":"Navigate to the bank application entrypoint","action":"{\"type\":\"navigate\",\"url\":\"http://localhost:4173/\"}"}
+{"ts":"2026-08-18T19:51:02.189Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.location","url":"about:blank"}
+{"ts":"2026-08-18T19:51:02.189Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.policy","stepId":"s0-navigate-to-the-bank-app","allow":true,"risk":"safe"}
+{"ts":"2026-08-18T19:51:02.189Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.act","type":"navigate","url":"http://localhost:4173/"}
+{"ts":"2026-08-18T19:51:02.202Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"url_matches","result":"pass"}
+{"ts":"2026-08-18T19:51:02.202Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"url_matches","result":"pass"}
+{"ts":"2026-08-18T19:51:02.204Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.204Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.213Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.resolve","target":"Acknowledge button on the scheduled-maintenance interstitial","won":"none","candidatesTried":2}
+{"ts":"2026-08-18T19:51:02.213Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"element_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.214Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.214Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.214Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.ok","stepId":"s0-navigate-to-the-bank-app","status":"ok"}
+{"ts":"2026-08-18T19:51:02.214Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.start","stepId":"s1-click-on-member-search-t","index":1,"intent":"Click on Member Search to search for member {{inputs.memberId}}","action":"{\"type\":\"click\",\"target\":\"link \\\"Member Search\\\"\"}"}
+{"ts":"2026-08-18T19:51:02.214Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.location","url":"http://localhost:4173/"}
+{"ts":"2026-08-18T19:51:02.215Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.policy","stepId":"s1-click-on-member-search-t","allow":true,"risk":"safe"}
+{"ts":"2026-08-18T19:51:02.217Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.resolve","target":"link \"Member Search\"","won":"role=link name=\"Member Search\"","candidateIndex":0}
+{"ts":"2026-08-18T19:51:02.217Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.locator","stepId":"s1-click-on-member-search-t","locatorUsed":"candidate[0]:role"}
+{"ts":"2026-08-18T19:51:02.217Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.act","type":"click","target":"link \"Member Search\""}
+{"ts":"2026-08-18T19:51:02.218Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.resolve","target":"link \"Member Search\"","won":"role=link name=\"Member Search\"","candidateIndex":0}
+{"ts":"2026-08-18T19:51:02.250Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"url_matches","result":"pass"}
+{"ts":"2026-08-18T19:51:02.251Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"url_matches","result":"pass"}
+{"ts":"2026-08-18T19:51:02.252Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.253Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.261Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.resolve","target":"Acknowledge button on the scheduled-maintenance interstitial","won":"none","candidatesTried":2}
+{"ts":"2026-08-18T19:51:02.261Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"element_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.261Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.261Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.261Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.ok","stepId":"s1-click-on-member-search-t","status":"ok"}
+{"ts":"2026-08-18T19:51:02.261Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.start","stepId":"s2-fill-the-member-id-field","index":2,"intent":"Fill the Member ID field with {{inputs.memberId}}","action":"{\"type\":\"fill\",\"target\":\"textbox \\\"Member ID\\\"\",\"value\":\"99999\"}"}
+{"ts":"2026-08-18T19:51:02.261Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.location","url":"http://localhost:4173/search"}
+{"ts":"2026-08-18T19:51:02.261Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.policy","stepId":"s2-fill-the-member-id-field","allow":true,"risk":"safe"}
+{"ts":"2026-08-18T19:51:02.263Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.resolve","target":"textbox \"Member ID\"","won":"role=textbox name=\"Member ID\"","candidateIndex":0}
+{"ts":"2026-08-18T19:51:02.263Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.locator","stepId":"s2-fill-the-member-id-field","locatorUsed":"candidate[0]:role"}
+{"ts":"2026-08-18T19:51:02.263Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.act","type":"fill","target":"textbox \"Member ID\""}
+{"ts":"2026-08-18T19:51:02.265Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.resolve","target":"textbox \"Member ID\"","won":"role=textbox name=\"Member ID\"","candidateIndex":0}
+{"ts":"2026-08-18T19:51:02.754Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.settle","url":"http://localhost:4173/search"}
+{"ts":"2026-08-18T19:51:02.756Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.757Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.760Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.resolve","target":"Acknowledge button on the scheduled-maintenance interstitial","won":"none","candidatesTried":2}
+{"ts":"2026-08-18T19:51:02.760Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"element_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.761Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.762Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"fail"}
+{"ts":"2026-08-18T19:51:02.762Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.ok","stepId":"s2-fill-the-member-id-field","status":"ok"}
+{"ts":"2026-08-18T19:51:02.762Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.start","stepId":"s3-click-search-records-but","index":3,"intent":"Click Search Records button to search for member {{inputs.memberId}}","action":"{\"type\":\"click\",\"target\":\"button \\\"Search Records\\\"\"}"}
+{"ts":"2026-08-18T19:51:02.762Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.location","url":"http://localhost:4173/search"}
+{"ts":"2026-08-18T19:51:02.762Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.policy","stepId":"s3-click-search-records-but","allow":true,"risk":"safe"}
+{"ts":"2026-08-18T19:51:02.764Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.resolve","target":"button \"Search Records\"","won":"role=button name=\"Search Records\"","candidateIndex":0}
+{"ts":"2026-08-18T19:51:02.764Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.locator","stepId":"s3-click-search-records-but","locatorUsed":"candidate[0]:role"}
+{"ts":"2026-08-18T19:51:02.765Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.act","type":"click","target":"button \"Search Records\""}
+{"ts":"2026-08-18T19:51:02.766Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.resolve","target":"button \"Search Records\"","won":"role=button name=\"Search Records\"","candidateIndex":0}
+{"ts":"2026-08-18T19:51:02.815Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"url_matches","result":"pass"}
+{"ts":"2026-08-18T19:51:02.815Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"url_matches","result":"pass"}
+{"ts":"2026-08-18T19:51:02.818Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"text_visible","result":"pass"}
+{"ts":"2026-08-18T19:51:02.856Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.evidence","tag":"outcome-MEMBER_NOT_FOUND","screenshotPath":"/Users/ashisharavindadini/Desktop/InterfaceAI/runs/replay-2026-08-18T19-51-02-099Z-t5m68h/outcome-MEMBER_NOT_FOUND.png","structurePath":"/Users/ashisharavindadini/Desktop/InterfaceAI/runs/replay-2026-08-18T19-51-02-099Z-t5m68h/outcome-MEMBER_NOT_FOUND.html"}
+{"ts":"2026-08-18T19:51:02.857Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.step.business-outcome","stepId":"s3-click-search-records-but","detectorId":"member-not-found","code":"MEMBER_NOT_FOUND"}
+{"ts":"2026-08-18T19:51:02.857Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"replay.finished","status":"business_outcome","steps":7,"recoveries":0,"evidenceDir":"/Users/ashisharavindadini/Desktop/InterfaceAI/runs/replay-2026-08-18T19-51-02-099Z-t5m68h"}
+{"ts":"2026-08-18T19:51:02.857Z","runId":"replay-2026-08-18T19-51-02-099Z-t5m68h","kind":"surface.close"}

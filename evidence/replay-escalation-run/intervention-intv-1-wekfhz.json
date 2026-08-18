@@ -1,0 +1,19 @@
+{
+  "id": "intv-1-wekfhz",
+  "raisedAt": "2026-08-18T19:51:36.683Z",
+  "reason": "step \"s0-navigate-to-the-bank-app\" failed: Session expired — requires re-authentication; automation must not sign in on its own.",
+  "stepId": "s0-navigate-to-the-bank-app",
+  "context": {
+    "capabilityId": "lookup-member-balance",
+    "goal": "Look up member {{inputs.memberId}} and read their current savings balance",
+    "screenshotPath": "/Users/ashisharavindadini/Desktop/InterfaceAI/runs/replay-2026-08-18T19-51-36-286Z-5a6tna/intervention-s0-navigate-to-the-bank-app.png",
+    "observedState": "at http://localhost:4173/ :: \"Legacy CU Core — Member Services Home Session Timeout Your session has expired. Return to sign-in CU Core v2.4.17 — internal use only. All member data is fictional.\""
+  },
+  "resolution": {
+    "operator": "a.aravindadini",
+    "tookControlAt": "2026-08-18T19:51:37.895Z",
+    "returnedControlAt": "2026-08-18T19:51:39.935Z",
+    "humanActions": [],
+    "disposition": "resumed"
+  }
+}

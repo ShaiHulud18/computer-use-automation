@@ -244,12 +244,17 @@ export function compileArtifact(args: {
     }
 
     const label = el.name.trim() || el.descriptors.labelText || vis || el.role;
+    // Same data-vs-identity rule for the human-readable description: an
+    // extracted cell must not be described by the value it happened to hold
+    // ("cell \"$4,521.19\"" bakes one member's balance — possibly sensitive —
+    // into the artifact). Describe it by role instead.
+    const safeLabel = isData(label) ? "(extracted value)" : `"${label}"`;
     return {
       // Describe the ELEMENT, never the intent: classifyRisk reads this
       // description, and intent phrasing like "submit member search" would
       // otherwise mark an innocent click risky and force escalation at replay.
       // The step's own `intent` field already records the why.
-      description: parameterize(`${el.role} "${label}"`),
+      description: parameterize(`${el.role} ${safeLabel}`),
       framePath: el.descriptors.framePath,
       candidates,
     };
@@ -312,9 +317,13 @@ export function compileArtifact(args: {
     const until: Condition | undefined = changedUrl
       ? { kind: "url_matches", pattern: urlPathPattern(entry.postUrl) }
       : undefined;
+    // Intents come from the model and routinely quote the concrete input
+    // ("enter member id 12345...") — parameterize them like every other
+    // persisted string so no caller value survives into ids or prose.
+    const safeIntent = parameterize(entry.intent);
     return {
-      id: `s${entry.seq}-${kebab(entry.intent)}`,
-      intent: entry.intent,
+      id: `s${entry.seq}-${kebab(safeIntent)}`,
+      intent: safeIntent,
       action,
       wait: until ? { until, timeoutMs: 10_000 } : { timeoutMs: 10_000 },
       postcondition: until,

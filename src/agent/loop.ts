@@ -185,6 +185,23 @@ export async function runDiscovery(
     fs.appendFileSync(transcriptPath, JSON.stringify(safe) + "\n", "utf8");
   }
 
+  /**
+   * Terminal sweep over the persisted transcript: sensitive values discovered
+   * MID-run (extracted outputs) must also vanish from lines written BEFORE we
+   * knew them. Streaming writes keep crash-durability; this pass makes the
+   * final file honest.
+   */
+  function finalizeTranscript(): void {
+    try {
+      const lines = fs.readFileSync(transcriptPath, "utf8");
+      let out = lines;
+      for (const v of sensitiveValues) out = out.split(JSON.stringify(v).slice(1, -1)).join(MASK);
+      if (out !== lines) fs.writeFileSync(transcriptPath, out, "utf8");
+    } catch {
+      /* transcript may not exist on very early failures — nothing to sweep */
+    }
+  }
+
   /** Raw base64 never reaches the transcript — screenshots live in evidence PNGs. */
   function summarizeBlocks(blocks: ContentBlockParam[]): unknown[] {
     return blocks.map((b) => {
@@ -236,6 +253,7 @@ export async function runDiscovery(
   function endRun(status: "gave_up" | "escalated_abort"): DiscoveryOutcome {
     log.event("discovery.end", { status, stepsTaken });
     writeTranscript({ direction: "outcome", status, stepsTaken });
+    finalizeTranscript();
     return { status, stepsTaken, transcriptPath };
   }
 
@@ -394,6 +412,14 @@ export async function runDiscovery(
       extracted: { output: input.output, rawText: raw },
     });
     extracted[input.output] = value;
+    // A sensitive OUTPUT's value becomes a secret the moment we read it:
+    // scrub it from every future transcript line, and finalizeTranscript()
+    // sweeps the lines that were written before we knew it (page text in
+    // earlier observations legitimately showed it).
+    if (spec.outputs[input.output]?.sensitive && value.length > 0) {
+      sensitiveValues.push(value);
+      if (raw && raw !== value) sensitiveValues.push(raw);
+    }
     log.event("agent.output_extracted", { output: input.output, intent: input.intent });
     // Feed the text back so the model can sanity-check what it captured.
     return { kind: "feedback", content: `Extracted ${input.output} = ${JSON.stringify(value)}.` };
@@ -433,10 +459,14 @@ export async function runDiscovery(
       capability: spec.capabilityId,
       version,
       steps: artifact.steps.length,
-      summary: input.summary,
+      // The model's free-text summary quotes whatever it saw on screen —
+      // including sensitive extracted values. Scrub with this run's secret
+      // set; the logger's pattern redaction can't know run-specific values.
+      summary: scrubStrings(input.summary) as string,
     });
     log.event("discovery.end", { status: "success", stepsTaken });
     writeTranscript({ direction: "outcome", status: "success", stepsTaken, artifactPath });
+    finalizeTranscript();
     return {
       kind: "terminal",
       outcome: {

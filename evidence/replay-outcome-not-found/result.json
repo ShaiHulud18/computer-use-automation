@@ -1,0 +1,61 @@
+{
+  "runId": "replay-2026-08-18T19-51-02-099Z-t5m68h",
+  "capabilityId": "lookup-member-balance",
+  "capabilityVersion": 1,
+  "startedAt": "2026-08-18T19:51:02.189Z",
+  "finishedAt": "2026-08-18T19:51:02.857Z",
+  "status": "business_outcome",
+  "outcome": {
+    "code": "MEMBER_NOT_FOUND",
+    "message": "The search returned no matching member records. This is a legitimate business answer ('no such member'), not an automation failure — callers receive it as an enumerated outcome."
+  },
+  "recoveries": [],
+  "steps": [
+    {
+      "stepId": "s0-navigate-to-the-bank-app",
+      "intent": "Navigate to the bank application entrypoint",
+      "status": "ok",
+      "durationMs": 25
+    },
+    {
+      "stepId": "s1-click-on-member-search-t",
+      "intent": "Click on Member Search to search for member {{inputs.memberId}}",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 47
+    },
+    {
+      "stepId": "s2-fill-the-member-id-field",
+      "intent": "Fill the Member ID field with {{inputs.memberId}}",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 501
+    },
+    {
+      "stepId": "s3-click-search-records-but",
+      "intent": "Click Search Records button to search for member {{inputs.memberId}}",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 95
+    },
+    {
+      "stepId": "s4-click-view-record-to-see",
+      "intent": "Click View Record to see member details including savings balance",
+      "status": "skipped",
+      "durationMs": 0
+    },
+    {
+      "stepId": "s5-extract-member-name-from",
+      "intent": "Extract member name from the record",
+      "status": "skipped",
+      "durationMs": 0
+    },
+    {
+      "stepId": "s6-extract-savings-balance",
+      "intent": "Extract savings balance from the account information",
+      "status": "skipped",
+      "durationMs": 0
+    }
+  ],
+  "evidenceDir": "/Users/ashisharavindadini/Desktop/InterfaceAI/runs/replay-2026-08-18T19-51-02-099Z-t5m68h"
+}

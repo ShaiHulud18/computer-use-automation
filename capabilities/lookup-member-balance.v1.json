@@ -1,0 +1,435 @@
+{
+  "schemaVersion": "1.0",
+  "capability": {
+    "id": "lookup-member-balance",
+    "version": 1,
+    "status": "draft",
+    "name": "Look up member savings balance",
+    "description": "Look up member {{inputs.memberId}} and read their current savings balance"
+  },
+  "app": {
+    "appId": "legacy-cu-core",
+    "surface": "web"
+  },
+  "bindings": {
+    "origin": "http://localhost:4173"
+  },
+  "tenantOverrides": {},
+  "contract": {
+    "inputs": {
+      "memberId": {
+        "type": "string",
+        "description": "5-digit member number",
+        "required": true,
+        "pattern": "^\\d{5}$",
+        "example": "12345",
+        "sensitive": false
+      }
+    },
+    "outputs": {
+      "memberName": {
+        "type": "string",
+        "description": "Member's full name as shown on the record",
+        "sensitive": false
+      },
+      "savingsBalance": {
+        "type": "string",
+        "description": "Current savings balance as displayed on the member record",
+        "sensitive": true
+      }
+    },
+    "outcomes": [
+      {
+        "code": "MEMBER_NOT_FOUND",
+        "description": "The search returned no matching member records. This is a legitimate business answer ('no such member'), not an automation failure — callers receive it as an enumerated outcome.",
+        "detector": "member-not-found"
+      },
+      {
+        "code": "VALIDATION_ERROR",
+        "description": "The search form rejected the supplied Member ID as malformed (must be exactly five digits). Reported as a business outcome so the caller can correct its input rather than treating this as a crash.",
+        "detector": "validation-error"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "id": "s0-navigate-to-the-bank-app",
+      "intent": "Navigate to the bank application entrypoint",
+      "action": {
+        "type": "navigate",
+        "url": "{{bindings.origin}}/"
+      },
+      "wait": {
+        "until": {
+          "kind": "url_matches",
+          "pattern": "^/"
+        },
+        "timeoutMs": 10000
+      },
+      "postcondition": {
+        "kind": "url_matches",
+        "pattern": "^/"
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s1-click-on-member-search-t",
+      "intent": "Click on Member Search to search for member {{inputs.memberId}}",
+      "action": {
+        "type": "click",
+        "target": {
+          "description": "link \"Member Search\"",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "link",
+              "name": "Member Search",
+              "rationale": "accessible role+name; survives markup/layout changes and maps to a11y APIs on desktop surfaces",
+              "confidence": "high"
+            },
+            {
+              "strategy": "text",
+              "text": "Member Search",
+              "exact": true,
+              "rationale": "short exact visible text; effective for links/buttons but sensitive to copy edits",
+              "confidence": "medium"
+            },
+            {
+              "strategy": "css",
+              "selector": "html > body:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(3) > td:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(2) > td:nth-of-type(1) > font:nth-of-type(1) > a:nth-of-type(1)",
+              "rationale": "structural fallback captured from live DOM; brittle, used only if semantic candidates fail",
+              "confidence": "low"
+            }
+          ]
+        }
+      },
+      "wait": {
+        "until": {
+          "kind": "url_matches",
+          "pattern": "^/search"
+        },
+        "timeoutMs": 10000
+      },
+      "postcondition": {
+        "kind": "url_matches",
+        "pattern": "^/search"
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s2-fill-the-member-id-field",
+      "intent": "Fill the Member ID field with {{inputs.memberId}}",
+      "action": {
+        "type": "fill",
+        "target": {
+          "description": "textbox \"Member ID\"",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "textbox",
+              "name": "Member ID",
+              "rationale": "accessible role+name; survives markup/layout changes and maps to a11y APIs on desktop surfaces",
+              "confidence": "high"
+            },
+            {
+              "strategy": "label",
+              "text": "Member ID",
+              "rationale": "explicit form label association; stable in this app",
+              "confidence": "high"
+            },
+            {
+              "strategy": "css",
+              "selector": "html > body:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(3) > td:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(1) > td:nth-of-type(2) > input:nth-of-type(1)",
+              "rationale": "structural fallback captured from live DOM; brittle, used only if semantic candidates fail",
+              "confidence": "low"
+            }
+          ]
+        },
+        "value": "{{inputs.memberId}}"
+      },
+      "wait": {
+        "timeoutMs": 10000
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s3-click-search-records-but",
+      "intent": "Click Search Records button to search for member {{inputs.memberId}}",
+      "action": {
+        "type": "click",
+        "target": {
+          "description": "button \"Search Records\"",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "button",
+              "name": "Search Records",
+              "rationale": "accessible role+name; survives markup/layout changes and maps to a11y APIs on desktop surfaces",
+              "confidence": "high"
+            },
+            {
+              "strategy": "text",
+              "text": "Search Records",
+              "exact": true,
+              "rationale": "short exact visible text; effective for links/buttons but sensitive to copy edits",
+              "confidence": "medium"
+            },
+            {
+              "strategy": "css",
+              "selector": "html > body:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(3) > td:nth-of-type(1) > form:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(2) > td:nth-of-type(2) > button:nth-of-type(1)",
+              "rationale": "structural fallback captured from live DOM; brittle, used only if semantic candidates fail",
+              "confidence": "low"
+            }
+          ]
+        }
+      },
+      "wait": {
+        "until": {
+          "kind": "url_matches",
+          "pattern": "^/search\\?mid=[^/&]+"
+        },
+        "timeoutMs": 10000
+      },
+      "postcondition": {
+        "kind": "url_matches",
+        "pattern": "^/search\\?mid=[^/&]+"
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s4-click-view-record-to-see",
+      "intent": "Click View Record to see member details including savings balance",
+      "action": {
+        "type": "click",
+        "target": {
+          "description": "link \"View Record\"",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "link",
+              "name": "View Record",
+              "rationale": "accessible role+name; survives markup/layout changes and maps to a11y APIs on desktop surfaces",
+              "confidence": "high"
+            },
+            {
+              "strategy": "text",
+              "text": "View Record",
+              "exact": true,
+              "rationale": "short exact visible text; effective for links/buttons but sensitive to copy edits",
+              "confidence": "medium"
+            },
+            {
+              "strategy": "css",
+              "selector": "html > body:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(3) > td:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(2) > td:nth-of-type(4) > font:nth-of-type(1) > a:nth-of-type(1)",
+              "rationale": "structural fallback captured from live DOM; brittle, used only if semantic candidates fail",
+              "confidence": "low"
+            }
+          ]
+        }
+      },
+      "wait": {
+        "until": {
+          "kind": "url_matches",
+          "pattern": "^/member\\?mid=[^/&]+"
+        },
+        "timeoutMs": 10000
+      },
+      "postcondition": {
+        "kind": "url_matches",
+        "pattern": "^/member\\?mid=[^/&]+"
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s5-extract-member-name-from",
+      "intent": "Extract member name from the record",
+      "action": {
+        "type": "extract",
+        "target": {
+          "description": "cell (extracted value)",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "css",
+              "selector": "html > body:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(3) > td:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(2) > td:nth-of-type(2)",
+              "rationale": "structural fallback captured from live DOM; brittle, used only if semantic candidates fail",
+              "confidence": "low"
+            }
+          ]
+        },
+        "output": "memberName"
+      },
+      "wait": {
+        "timeoutMs": 10000
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s6-extract-savings-balance",
+      "intent": "Extract savings balance from the account information",
+      "action": {
+        "type": "extract",
+        "target": {
+          "description": "cell (extracted value)",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "css",
+              "selector": "html > body:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(3) > td:nth-of-type(1) > table:nth-of-type(2) > tbody:nth-of-type(1) > tr:nth-of-type(2) > td:nth-of-type(2)",
+              "rationale": "structural fallback captured from live DOM; brittle, used only if semantic candidates fail",
+              "confidence": "low"
+            }
+          ]
+        },
+        "output": "savingsBalance"
+      },
+      "wait": {
+        "timeoutMs": 10000
+      },
+      "risk": "safe"
+    }
+  ],
+  "detectors": [
+    {
+      "id": "member-not-found",
+      "description": "The search returned no matching member records. This is a legitimate business answer ('no such member'), not an automation failure — callers receive it as an enumerated outcome.",
+      "condition": {
+        "kind": "text_visible",
+        "pattern": "No member records matched"
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "business_outcome",
+        "code": "MEMBER_NOT_FOUND"
+      }
+    },
+    {
+      "id": "validation-error",
+      "description": "The search form rejected the supplied Member ID as malformed (must be exactly five digits). Reported as a business outcome so the caller can correct its input rather than treating this as a crash.",
+      "condition": {
+        "kind": "text_visible",
+        "pattern": "must be a 5-digit number"
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "business_outcome",
+        "code": "VALIDATION_ERROR"
+      }
+    },
+    {
+      "id": "maintenance-interstitial",
+      "description": "A scheduled-maintenance interstitial hijacked the requested page. It is a known, transient obstacle: dismissing it via its Acknowledge button returns to the originally requested page, after which the interrupted step can proceed.",
+      "condition": {
+        "kind": "element_visible",
+        "target": {
+          "description": "Acknowledge button on the scheduled-maintenance interstitial",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "button",
+              "name": "Acknowledge",
+              "rationale": "The interstitial's only actionable control; role plus accessible name is unique on the notice page and survives markup churn in this table-soup app.",
+              "confidence": "high"
+            },
+            {
+              "strategy": "text",
+              "text": "Acknowledge",
+              "exact": true,
+              "rationale": "Fallback on the button's visible caption in case role resolution fails on this legacy markup; the word appears nowhere else in the app.",
+              "confidence": "medium"
+            }
+          ]
+        }
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "recoverable",
+        "recovery": {
+          "type": "dismiss",
+          "target": {
+            "description": "Acknowledge button on the scheduled-maintenance interstitial",
+            "framePath": [],
+            "candidates": [
+              {
+                "strategy": "role",
+                "role": "button",
+                "name": "Acknowledge",
+                "rationale": "The interstitial's only actionable control; role plus accessible name is unique on the notice page and survives markup churn in this table-soup app.",
+                "confidence": "high"
+              },
+              {
+                "strategy": "text",
+                "text": "Acknowledge",
+                "exact": true,
+                "rationale": "Fallback on the button's visible caption in case role resolution fails on this legacy markup; the word appears nowhere else in the app.",
+                "confidence": "medium"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "session-expired",
+      "description": "The app's session timed out; every subsequent page renders the expiry notice until a person signs in again. Signing in is a credentialed act the automation must never perform, so this always escalates.",
+      "condition": {
+        "kind": "text_visible",
+        "pattern": "Your session has expired"
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "hard_failure",
+        "reason": "Session expired — requires re-authentication; automation must not sign in on its own."
+      }
+    },
+    {
+      "id": "app-error",
+      "description": "The application served its generic error screen (Ref #500). The flow state is unknown after this, so replay stops and captures evidence rather than guessing.",
+      "condition": {
+        "kind": "text_visible",
+        "pattern": "Application Error \\(Ref #500\\)"
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "hard_failure",
+        "reason": "Target application returned an error page."
+      }
+    }
+  ],
+  "checkpoint": {
+    "description": "Flow complete: final URL matches ^/member\\?mid=[^/&]+ and the \"memberName\" extraction target is visible.",
+    "conditions": [
+      {
+        "kind": "url_matches",
+        "pattern": "^/member\\?mid=[^/&]+"
+      },
+      {
+        "kind": "element_visible",
+        "target": {
+          "description": "cell (extracted value)",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "css",
+              "selector": "html > body:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(3) > td:nth-of-type(1) > table:nth-of-type(1) > tbody:nth-of-type(1) > tr:nth-of-type(2) > td:nth-of-type(2)",
+              "rationale": "structural fallback captured from live DOM; brittle, used only if semantic candidates fail",
+              "confidence": "low"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "provenance": {
+    "discoveredAt": "2026-08-18T19:48:27.661Z",
+    "model": "claude-sonnet-4-5",
+    "discoveryRunId": "discover-2026-08-18T19-48-00-912Z-ba42g7",
+    "evidenceRef": "evidence/discovery-run",
+    "goal": "Look up member {{inputs.memberId}} and read their current savings balance"
+  }
+}

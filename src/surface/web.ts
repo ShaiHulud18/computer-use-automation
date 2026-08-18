@@ -577,8 +577,22 @@ export class WebSurface implements Surface {
 
   private async evalCondition(condition: Condition): Promise<boolean> {
     switch (condition.kind) {
-      case "url_matches":
-        return new RegExp(condition.pattern).test(this.page.url());
+      case "url_matches": {
+        // Patterns are tested against PATH+QUERY, not the full URL: the
+        // compiler anchors patterns like "^/member\\?mid=[^/&]+", and the
+        // origin is deliberately out of scope here — it is tenant binding
+        // (artifact.bindings) and policy (allowlist) territory. This also
+        // keeps the condition portable to surfaces whose "location" is not
+        // an http URL.
+        let pathAndQuery: string;
+        try {
+          const u = new URL(this.page.url());
+          pathAndQuery = u.pathname + u.search;
+        } catch {
+          pathAndQuery = this.page.url(); // about:blank and friends
+        }
+        return new RegExp(condition.pattern).test(pathAndQuery);
+      }
       case "text_visible": {
         // innerText (not content()) so hidden markup can't fake visibility.
         const body = await this.page

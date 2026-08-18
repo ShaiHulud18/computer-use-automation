@@ -357,6 +357,21 @@ async function runReplayCommand(opts: ReplayCliOpts): Promise<void> {
     });
 
     printReplayResult(result);
+    // Persist the structured result alongside the run's log as evidence.
+    // Unlike stdout (the caller is entitled to raw outputs), the persisted
+    // copy masks outputs the contract marks sensitive.
+    const persisted = {
+      ...result,
+      outputs:
+        result.outputs &&
+        Object.fromEntries(
+          Object.entries(result.outputs).map(([k, v]) => [
+            k,
+            artifact.contract.outputs[k]?.sensitive ? "▓▓REDACTED▓▓" : v,
+          ]),
+        ),
+    };
+    fs.writeFileSync(path.join(log.dir, "result.json"), JSON.stringify(persisted, null, 2) + "\n", "utf8");
     process.exitCode = REPLAY_EXIT_CODES[result.status];
   } finally {
     if (broker) {

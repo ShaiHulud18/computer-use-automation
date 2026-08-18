@@ -1,0 +1,83 @@
+{
+  "runId": "replay-2026-08-18T19-51-36-286Z-5a6tna",
+  "capabilityId": "lookup-member-balance",
+  "capabilityVersion": 1,
+  "startedAt": "2026-08-18T19:51:36.595Z",
+  "finishedAt": "2026-08-18T19:51:41.166Z",
+  "status": "success",
+  "outputs": {
+    "memberName": "Margaret Chen",
+    "savingsBalance": "▓▓REDACTED▓▓"
+  },
+  "intervention": {
+    "id": "intv-1-wekfhz",
+    "raisedAt": "2026-08-18T19:51:36.683Z",
+    "reason": "step \"s0-navigate-to-the-bank-app\" failed: Session expired — requires re-authentication; automation must not sign in on its own.",
+    "stepId": "s0-navigate-to-the-bank-app",
+    "context": {
+      "capabilityId": "lookup-member-balance",
+      "goal": "Look up member {{inputs.memberId}} and read their current savings balance",
+      "screenshotPath": "/Users/ashisharavindadini/Desktop/InterfaceAI/runs/replay-2026-08-18T19-51-36-286Z-5a6tna/intervention-s0-navigate-to-the-bank-app.png",
+      "observedState": "at http://localhost:4173/ :: \"Legacy CU Core — Member Services Home Session Timeout Your session has expired. Return to sign-in CU Core v2.4.17 — internal use only. All member data is fictional.\""
+    },
+    "resolution": {
+      "operator": "a.aravindadini",
+      "tookControlAt": "2026-08-18T19:51:37.895Z",
+      "returnedControlAt": "2026-08-18T19:51:39.935Z",
+      "humanActions": [],
+      "disposition": "resumed"
+    }
+  },
+  "recoveries": [],
+  "steps": [
+    {
+      "stepId": "s0-navigate-to-the-bank-app",
+      "intent": "Navigate to the bank application entrypoint",
+      "status": "ok",
+      "durationMs": 3365
+    },
+    {
+      "stepId": "s1-click-on-member-search-t",
+      "intent": "Click on Member Search to search for member {{inputs.memberId}}",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 64
+    },
+    {
+      "stepId": "s2-fill-the-member-id-field",
+      "intent": "Fill the Member ID field with {{inputs.memberId}}",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 500
+    },
+    {
+      "stepId": "s3-click-search-records-but",
+      "intent": "Click Search Records button to search for member {{inputs.memberId}}",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 62
+    },
+    {
+      "stepId": "s4-click-view-record-to-see",
+      "intent": "Click View Record to see member details including savings balance",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:role",
+      "durationMs": 60
+    },
+    {
+      "stepId": "s5-extract-member-name-from",
+      "intent": "Extract member name from the record",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:css",
+      "durationMs": 506
+    },
+    {
+      "stepId": "s6-extract-savings-balance",
+      "intent": "Extract savings balance from the account information",
+      "status": "ok",
+      "locatorUsed": "candidate[0]:css",
+      "durationMs": 11
+    }
+  ],
+  "evidenceDir": "/Users/ashisharavindadini/Desktop/InterfaceAI/runs/replay-2026-08-18T19-51-36-286Z-5a6tna"
+}
