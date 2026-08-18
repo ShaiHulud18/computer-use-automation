@@ -1,0 +1,28 @@
+{
+  "name": "capability-automation",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Computer-use automation system: LLM-driven discovery, typed capability artifacts, deterministic replay, human escalation.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "target-app": "tsx src/target-app/server.ts",
+    "discover": "tsx src/cli/index.ts discover",
+    "replay": "tsx src/cli/index.ts replay",
+    "capabilities": "tsx src/cli/index.ts capabilities",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "commander": "^12.1.0",
+    "playwright": "^1.49.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

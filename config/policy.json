@@ -1,0 +1,19 @@
+{
+  "allowedOrigins": ["http://localhost:4173"],
+  "allowedActions": ["navigate", "click", "fill", "select", "press", "extract"],
+  "riskyActionHandling": "escalate",
+  "riskyPatterns": [
+    "\\b(confirm|submit|approve|authorize)\\b",
+    "\\b(delete|remove|close account)\\b",
+    "\\b(transfer|withdraw|deposit|post|disburse)\\b",
+    "\\bopen (sub-)?account\\b"
+  ],
+  "redaction": {
+    "sensitiveParams": ["password", "ssn", "token", "secret", "pin"],
+    "patterns": [
+      "\\b\\d{3}-\\d{2}-\\d{4}\\b",
+      "\\b(?:\\d[ -]*?){13,19}\\b",
+      "sk-[A-Za-z0-9-_]{10,}"
+    ]
+  }
+}
