@@ -1,0 +1,392 @@
+{
+  "schemaVersion": "1.0",
+  "capability": {
+    "id": "lookup-member-balance-fixture",
+    "version": 1,
+    "status": "draft",
+    "name": "Look up member savings balance (hand-authored integration fixture)",
+    "description": "Given a member ID, navigate search -> detail and return the member's name and current savings balance."
+  },
+  "app": {
+    "appId": "legacy-cu-core",
+    "surface": "web"
+  },
+  "bindings": {
+    "origin": "http://localhost:4173"
+  },
+  "tenantOverrides": {},
+  "contract": {
+    "inputs": {
+      "memberId": {
+        "type": "string",
+        "description": "5-digit member number",
+        "required": true,
+        "pattern": "^\\d{5}$",
+        "example": "12345",
+        "sensitive": false
+      }
+    },
+    "outputs": {
+      "memberName": {
+        "type": "string",
+        "description": "Member's full name",
+        "sensitive": false
+      },
+      "savingsBalance": {
+        "type": "string",
+        "description": "Current savings balance as displayed",
+        "sensitive": true
+      }
+    },
+    "outcomes": [
+      {
+        "code": "MEMBER_NOT_FOUND",
+        "description": "The search returned no matching member records. This is a legitimate business answer ('no such member'), not an automation failure \u2014 callers receive it as an enumerated outcome.",
+        "detector": "member-not-found"
+      },
+      {
+        "code": "VALIDATION_ERROR",
+        "description": "The search form rejected the supplied Member ID as malformed (must be exactly five digits). Reported as a business outcome so the caller can correct its input rather than treating this as a crash.",
+        "detector": "validation-error"
+      }
+    ]
+  },
+  "steps": [
+    {
+      "id": "s1-open-app",
+      "intent": "open the member services app",
+      "action": {
+        "type": "navigate",
+        "url": "{{bindings.origin}}/"
+      },
+      "wait": {
+        "until": {
+          "kind": "text_visible",
+          "pattern": "Member Services"
+        },
+        "timeoutMs": 10000
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s2-open-search",
+      "intent": "go to member search",
+      "action": {
+        "type": "click",
+        "target": {
+          "description": "Member Search nav link",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "link",
+              "name": "Member Search",
+              "rationale": "accessible role+name; survives markup changes",
+              "confidence": "high"
+            },
+            {
+              "strategy": "css",
+              "selector": "a[href='/search']",
+              "rationale": "structural fallback",
+              "confidence": "low"
+            }
+          ]
+        }
+      },
+      "wait": {
+        "until": {
+          "kind": "url_matches",
+          "pattern": "/search"
+        },
+        "timeoutMs": 10000
+      },
+      "postcondition": {
+        "kind": "text_visible",
+        "pattern": "Member ID"
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s3-enter-member-id",
+      "intent": "enter the member id",
+      "action": {
+        "type": "fill",
+        "target": {
+          "description": "Member ID search field",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "label",
+              "text": "Member ID",
+              "rationale": "explicit form label association",
+              "confidence": "high"
+            },
+            {
+              "strategy": "css",
+              "selector": "input[name='mid']",
+              "rationale": "structural fallback on legacy name attr",
+              "confidence": "low"
+            }
+          ]
+        },
+        "value": "{{inputs.memberId}}"
+      },
+      "wait": {
+        "timeoutMs": 10000
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s4-search",
+      "intent": "run the search",
+      "action": {
+        "type": "click",
+        "target": {
+          "description": "Search Records button",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "button",
+              "name": "Search Records",
+              "rationale": "accessible role+name",
+              "confidence": "high"
+            },
+            {
+              "strategy": "css",
+              "selector": "form button[type='submit']",
+              "rationale": "structural fallback",
+              "confidence": "low"
+            }
+          ]
+        }
+      },
+      "wait": {
+        "until": {
+          "kind": "url_matches",
+          "pattern": "/search\\?mid="
+        },
+        "timeoutMs": 15000
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s5-open-record",
+      "intent": "open the matching member record",
+      "action": {
+        "type": "click",
+        "target": {
+          "description": "View Record link in results row",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "link",
+              "name": "View Record",
+              "rationale": "accessible role+name; single result row",
+              "confidence": "high"
+            },
+            {
+              "strategy": "css",
+              "selector": "table a[href^='/member']",
+              "rationale": "structural fallback",
+              "confidence": "low"
+            }
+          ]
+        }
+      },
+      "wait": {
+        "until": {
+          "kind": "url_matches",
+          "pattern": "/member\\?mid="
+        },
+        "timeoutMs": 15000
+      },
+      "postcondition": {
+        "kind": "text_visible",
+        "pattern": "Member Record"
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s6-read-name",
+      "intent": "read the member name",
+      "action": {
+        "type": "extract",
+        "target": {
+          "description": "Name value cell in the member info table",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "css",
+              "selector": "tr:has(> td.c1:has-text('Name:')) > td.c2",
+              "rationale": "value cell has no accessible name; anchored to its stable label cell text",
+              "confidence": "low"
+            }
+          ]
+        },
+        "output": "memberName"
+      },
+      "wait": {
+        "timeoutMs": 10000
+      },
+      "risk": "safe"
+    },
+    {
+      "id": "s7-read-savings",
+      "intent": "read the savings balance",
+      "action": {
+        "type": "extract",
+        "target": {
+          "description": "Savings row balance cell in the accounts table",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "css",
+              "selector": "tr:has(> td.c1:has-text('Savings')) > td[align='right']",
+              "rationale": "balance cell text is data, not identity; anchored to the Savings row label",
+              "confidence": "low"
+            }
+          ]
+        },
+        "output": "savingsBalance"
+      },
+      "wait": {
+        "timeoutMs": 10000
+      },
+      "risk": "safe"
+    }
+  ],
+  "detectors": [
+    {
+      "id": "member-not-found",
+      "description": "The search returned no matching member records. This is a legitimate business answer ('no such member'), not an automation failure \u2014 callers receive it as an enumerated outcome.",
+      "condition": {
+        "kind": "text_visible",
+        "pattern": "No member records matched"
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "business_outcome",
+        "code": "MEMBER_NOT_FOUND"
+      }
+    },
+    {
+      "id": "validation-error",
+      "description": "The search form rejected the supplied Member ID as malformed (must be exactly five digits). Reported as a business outcome so the caller can correct its input rather than treating this as a crash.",
+      "condition": {
+        "kind": "text_visible",
+        "pattern": "must be a 5-digit number"
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "business_outcome",
+        "code": "VALIDATION_ERROR"
+      }
+    },
+    {
+      "id": "maintenance-interstitial",
+      "description": "A scheduled-maintenance interstitial hijacked the requested page. It is a known, transient obstacle: dismissing it via its Acknowledge button returns to the originally requested page, after which the interrupted step can proceed.",
+      "condition": {
+        "kind": "element_visible",
+        "target": {
+          "description": "Acknowledge button on the scheduled-maintenance interstitial",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "button",
+              "name": "Acknowledge",
+              "rationale": "The interstitial's only actionable control; role plus accessible name is unique on the notice page and survives markup churn in this table-soup app.",
+              "confidence": "high"
+            },
+            {
+              "strategy": "text",
+              "text": "Acknowledge",
+              "exact": true,
+              "rationale": "Fallback on the button's visible caption in case role resolution fails on this legacy markup; the word appears nowhere else in the app.",
+              "confidence": "medium"
+            }
+          ]
+        }
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "recoverable",
+        "recovery": {
+          "type": "dismiss",
+          "target": {
+            "description": "Acknowledge button on the scheduled-maintenance interstitial",
+            "framePath": [],
+            "candidates": [
+              {
+                "strategy": "role",
+                "role": "button",
+                "name": "Acknowledge",
+                "rationale": "The interstitial's only actionable control; role plus accessible name is unique on the notice page and survives markup churn in this table-soup app.",
+                "confidence": "high"
+              },
+              {
+                "strategy": "text",
+                "text": "Acknowledge",
+                "exact": true,
+                "rationale": "Fallback on the button's visible caption in case role resolution fails on this legacy markup; the word appears nowhere else in the app.",
+                "confidence": "medium"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "session-expired",
+      "description": "The app's session timed out; every subsequent page renders the expiry notice until a person signs in again. Signing in is a credentialed act the automation must never perform, so this always escalates.",
+      "condition": {
+        "kind": "text_visible",
+        "pattern": "Your session has expired"
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "hard_failure",
+        "reason": "Session expired \u2014 requires re-authentication; automation must not sign in on its own."
+      }
+    },
+    {
+      "id": "app-error",
+      "description": "The application served its generic error screen (Ref #500). The flow state is unknown after this, so replay stops and captures evidence rather than guessing.",
+      "condition": {
+        "kind": "text_visible",
+        "pattern": "Application Error \\(Ref #500\\)"
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "hard_failure",
+        "reason": "Target application returned an error page."
+      }
+    }
+  ],
+  "checkpoint": {
+    "description": "On the member record page with the accounts table rendered",
+    "conditions": [
+      {
+        "kind": "url_matches",
+        "pattern": "/member\\?mid="
+      },
+      {
+        "kind": "text_visible",
+        "pattern": "Member Record"
+      },
+      {
+        "kind": "text_visible",
+        "pattern": "Savings"
+      }
+    ]
+  },
+  "provenance": {
+    "discoveredAt": "2026-08-18T18:31:52.030Z",
+    "model": "hand-authored:integration-fixture",
+    "discoveryRunId": "fixture",
+    "evidenceRef": "test/fixtures",
+    "goal": "look up a member by id and read their current savings balance"
+  }
+}

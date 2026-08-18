@@ -1,0 +1,93 @@
+{
+  "appId": "legacy-cu-core",
+  "detectors": [
+    {
+      "id": "member-not-found",
+      "description": "The search returned no matching member records. This is a legitimate business answer ('no such member'), not an automation failure — callers receive it as an enumerated outcome.",
+      "condition": { "kind": "text_visible", "pattern": "No member records matched" },
+      "appliesTo": "always",
+      "classification": { "kind": "business_outcome", "code": "MEMBER_NOT_FOUND" }
+    },
+    {
+      "id": "validation-error",
+      "description": "The search form rejected the supplied Member ID as malformed (must be exactly five digits). Reported as a business outcome so the caller can correct its input rather than treating this as a crash.",
+      "condition": { "kind": "text_visible", "pattern": "must be a 5-digit number" },
+      "appliesTo": "always",
+      "classification": { "kind": "business_outcome", "code": "VALIDATION_ERROR" }
+    },
+    {
+      "id": "maintenance-interstitial",
+      "description": "A scheduled-maintenance interstitial hijacked the requested page. It is a known, transient obstacle: dismissing it via its Acknowledge button returns to the originally requested page, after which the interrupted step can proceed.",
+      "condition": {
+        "kind": "element_visible",
+        "target": {
+          "description": "Acknowledge button on the scheduled-maintenance interstitial",
+          "framePath": [],
+          "candidates": [
+            {
+              "strategy": "role",
+              "role": "button",
+              "name": "Acknowledge",
+              "rationale": "The interstitial's only actionable control; role plus accessible name is unique on the notice page and survives markup churn in this table-soup app.",
+              "confidence": "high"
+            },
+            {
+              "strategy": "text",
+              "text": "Acknowledge",
+              "exact": true,
+              "rationale": "Fallback on the button's visible caption in case role resolution fails on this legacy markup; the word appears nowhere else in the app.",
+              "confidence": "medium"
+            }
+          ]
+        }
+      },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "recoverable",
+        "recovery": {
+          "type": "dismiss",
+          "target": {
+            "description": "Acknowledge button on the scheduled-maintenance interstitial",
+            "framePath": [],
+            "candidates": [
+              {
+                "strategy": "role",
+                "role": "button",
+                "name": "Acknowledge",
+                "rationale": "The interstitial's only actionable control; role plus accessible name is unique on the notice page and survives markup churn in this table-soup app.",
+                "confidence": "high"
+              },
+              {
+                "strategy": "text",
+                "text": "Acknowledge",
+                "exact": true,
+                "rationale": "Fallback on the button's visible caption in case role resolution fails on this legacy markup; the word appears nowhere else in the app.",
+                "confidence": "medium"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "session-expired",
+      "description": "The app's session timed out; every subsequent page renders the expiry notice until a person signs in again. Signing in is a credentialed act the automation must never perform, so this always escalates.",
+      "condition": { "kind": "text_visible", "pattern": "Your session has expired" },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "hard_failure",
+        "reason": "Session expired — requires re-authentication; automation must not sign in on its own."
+      }
+    },
+    {
+      "id": "app-error",
+      "description": "The application served its generic error screen (Ref #500). The flow state is unknown after this, so replay stops and captures evidence rather than guessing.",
+      "condition": { "kind": "text_visible", "pattern": "Application Error \\(Ref #500\\)" },
+      "appliesTo": "always",
+      "classification": {
+        "kind": "hard_failure",
+        "reason": "Target application returned an error page."
+      }
+    }
+  ]
+}
